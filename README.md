@@ -52,6 +52,6 @@ Execute o cliente
   ./cli
 ```
 
-### Authors
+### Autores
 - [Beatriz Morelatto Lorente](https://github.com/BiaLorente)
 - [Rafael Alves de Oliveira Perroni](https://github.com/rafa-perroni00)
