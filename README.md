@@ -1,6 +1,6 @@
 # File Transfer
 
-## Descrição do projeto:
+## Overview
 
 * Pacote UDP.             
 * Função para preencher e consultar o pacote.
@@ -18,7 +18,7 @@
 * Função que reconstitui o arquivo texto em HD.
 * Função para imprimir o arquivo texto na tela.
 
-## Para clonar e executar o projeto
+## Execute
 
 Clone o projeto
 
