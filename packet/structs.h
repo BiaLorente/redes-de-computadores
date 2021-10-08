@@ -18,3 +18,5 @@ struct
 } typedef packet;
 
 void printPacket(packet);
+void rewindFile(packet);
+

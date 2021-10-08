@@ -205,3 +205,25 @@ packet fillPacketWithFrag(sentFrame window, int fragLenght)
     puts(pack.frame.buffer);
     return pack; //pack;
 }
+
+void rewindFile(packet pack)
+{
+    FILE *fp;
+
+       if ((fp = fopen("output.txt", "a")) == NULL)
+       {
+           printf("Error opening the file\n");
+           exit(1);
+       }
+    //fseek(fp, 0, SEEK_END);
+
+       //for (int i = 0; i < 5; i++)
+       //{
+           fwrite(pack.frame.buffer, 3, 1, fp);
+           //tam += segmento[i].tam;
+       //}
+    rewind(fp);
+
+       fclose(fp);
+       //return tam;
+}

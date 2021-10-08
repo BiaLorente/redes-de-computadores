@@ -46,6 +46,8 @@ void func(int sockfd)
         // print buffer which contains the client contents
         //printf("From client: %s\t To client : ", buff);
         printPacket(pack[i]);
+        rewindFile(pack[i]);
+
         //printf("pass the printPacket\n");
         bzero(buff, MAX);
         //i = 0;
