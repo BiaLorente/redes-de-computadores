@@ -69,37 +69,61 @@ void func(int sockfd)
 // Driver code
 int main()
 {
-    char opt;
-    printf("Enter `u` for UDP connectio or `t` for TCP connectio\n: ");
-    opt = getchar();
-    if (opt == 'u') {
+    int opt = 0;
+    printf("\nEnter `1` for UDP connectio or `2` for TCP connectio: ");
+    //scanf("%d\n", &opt);
+    printf("\nYou selected: %d\n",opt);
+    if (opt == 0) {
         char buffer[100];
         packet *packFull;
         char *message = "Hello Client";
-        int listenfd, len;
+        int sockfd, len;
         struct sockaddr_in servaddr, cliaddr;
-        bzero(&servaddr, sizeof(servaddr));
-      
+        
+        printf("\nCreating socket UDP\n");
+
+        if ( (sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0 ) {
+            perror("\nsocket creation failed\n");
+            exit(0);
+        }
+        
+        memset(&servaddr, 0, sizeof(servaddr));
+        memset(&cliaddr, 0, sizeof(cliaddr));
+        
         // Create a UDP Socket
-        listenfd = socket(AF_INET, SOCK_DGRAM, 0);
         servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
         servaddr.sin_port = htons(PORT);
         servaddr.sin_family = AF_INET;
        
-        // bind server address to socket descriptor
-        bind(listenfd, (struct sockaddr*)&servaddr, sizeof(servaddr));
+        printf("\Bind socket UDP\n");
+
+        // Bind the socket with the server address
+        if ( bind(sockfd, (const struct sockaddr *)&servaddr,
+                sizeof(servaddr)) < 0 )
+        {
+            perror("bind failed");
+            exit(0);
+        }
            
+        printf("\Ready to receive socket UDP\n");
+        packet *pack = malloc(sizeof(packet) * (4));
+
         //receive the datagram
         len = sizeof(cliaddr);
-        int n = recvfrom(listenfd, packFull, sizeof(buffer),
-                0, (struct sockaddr*)&cliaddr,&len); //receive message from server
-        buffer[n] = '\0';
+
+        
+        for (int i=0; i<5; i++) {
+            int n = recvfrom(sockfd, &pack[i], sizeof(packet),
+                    0, (struct sockaddr*)&cliaddr,&len); //receive message from server
+            printf("receive socket UDP number:%d \n", i);
+            printPacket(pack[i]);
+            rewindFile(pack[i]);
+        }
         //puts(buffer);
         //printPacket(packFull);
+        printf("\Receive finish \n");
 
-        // send the response
-        sendto(listenfd, message, MAXLINE, 0,
-              (struct sockaddr*)&cliaddr, sizeof(cliaddr));
+
     }
     else{
         int sockfd, connfd, len;

@@ -42,14 +42,14 @@ void func(int sockfd, packet *pack, int numFrag)
 void sendPacket(packet *pack, int numFrag)
     {
         
-        char opt;
-        printf("Enter `u` for UDP connectio or `t` for TCP connectio\n: ");
+        int opt = 0;
+        printf("\nEnter `1` for UDP connectio or `2` for TCP connectio: ");
         
-        scanf("%c\n", &opt);
-        printf("You selected: %c",opt);
-        /*if (opt == 'u')
+        //scanf("%d\n", &opt);
+        printf("\nYou selected: %d\n",opt);
+        if (opt == 0)
         {
-            printf("You selected UDP");
+            printf("\nYou selected UDP\n");
             char buffer[100];
             char *message = "Hello Server";
             int sockfd, n;
@@ -58,7 +58,7 @@ void sendPacket(packet *pack, int numFrag)
             // create datagram socket
             if ( (sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0 )
             {
-                perror("socket creation failed");
+                perror("\n socket creation failed\n");
                 exit(0);
             }
             // clear servaddr
@@ -67,17 +67,18 @@ void sendPacket(packet *pack, int numFrag)
             servaddr.sin_family = AF_INET;
             servaddr.sin_port = htons(PORT);
             servaddr.sin_addr.s_addr = INADDR_ANY;
-          
-            // connect to server
-            /*if(connect(sockfd, (struct sockaddr *)&servaddr, sizeof(servaddr)) < 0)
-            {
-                printf("\n Error : Connect Failed \n");
-                exit(0);
+                      
+            printf("\Ready to send socket UDP\n");
+            //packet *pack = malloc(sizeof(packet) * (4));
+            for (int i=0; i<5; i++) {
+                sendto(sockfd, &pack[i], sizeof(packet),
+                    0, (const struct sockaddr *) &servaddr,
+                        sizeof(servaddr));
+                printf("send socket UDP number:%d \n", i);
+
             }
-            
-            sendto(sockfd, pack, sizeof(pack),
-                0, (const struct sockaddr *) &servaddr,
-                    sizeof(servaddr));
+            printf("\Finish send \n");
+
       
             // request to send datagram
             // no need to specify server address in sendto
@@ -92,9 +93,9 @@ void sendPacket(packet *pack, int numFrag)
             close(sockfd);
         }
         else
-        {*/
-            //if (opt=='t')
-            //{
+        {
+            if (opt==2)
+            {
                 int sockfd, connfd;
                 struct sockaddr_in servaddr, cli;
                
@@ -127,8 +128,8 @@ void sendPacket(packet *pack, int numFrag)
                
                 // close the socket
                 close(sockfd);
-            //}
+            }
             
-        //}
+        }
     
 }
