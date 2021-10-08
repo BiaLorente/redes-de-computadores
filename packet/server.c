@@ -9,7 +9,8 @@
 #include <stdlib.h>
 #include <netdb.h>
 
-#include "packetFunc.c"
+//#include "packetFunc.c"
+#include "structs.h"
 
 
 #define PORT 8080
@@ -21,27 +22,31 @@
 // Function designed for chat between client and server.
 void func(int sockfd)
 {
-    packet *pack;
+    packet *pack = malloc(sizeof(packet) * (4));
+    //pack->frame.buffer= malloc(sizeof(char) * (4));
+    //printf("Sizeof pack[i]->frame.buffer: %lu\n ", sizeof(pack->frame.buffer));
+
     char buff[MAX];
     //buff = 'Hey\n';
     strcpy(buff, "Server received");
     //int i;
     puts(buff);
     // infinite loop for chat
-    for (;;) {
+    for (int i=0; i<5; i++) {
         bzero(buff, MAX);
    
         // read the message from client and copy it in buffer
-        printf("going to read\n");
-        read(sockfd, pack, sizeof(pack));
+        read(sockfd, &pack[i], sizeof(packet));
         
-        printf("pass the read\n");
-        printf("o seq number: %d/n", pack->frame.seqNum);
+        //printf("o seq number: %d\n", pack[i].frame.seqNum);
+        //printf("Sizeof pack[i].frame.buffer: %lu\n ", sizeof(pack[i].frame.buffer));
+        //printf("Data\n");
+        //puts(pack[i].frame.buffer);
 
         // print buffer which contains the client contents
         //printf("From client: %s\t To client : ", buff);
-        printPacket(pack);
-        printf("pass the printPacket\n");
+        printPacket(pack[i]);
+        //printf("pass the printPacket\n");
         bzero(buff, MAX);
         //i = 0;
         // copy server message in the buffer
@@ -52,10 +57,10 @@ void func(int sockfd)
         //write(sockfd, buff, sizeof(buff));
    
         // if msg contains "Exit" then server exit and chat ended.
-        if (strncmp("exit", buff, 4) == 0) {
-            printf("Server Exit...\n");
-            break;
-        }
+        //if (strncmp("exit", buff, 4) == 0) {
+          //  printf("Server Exit...\n");
+            //break;
+        //}
     }
 }
 
@@ -88,7 +93,7 @@ int main()
                 0, (struct sockaddr*)&cliaddr,&len); //receive message from server
         buffer[n] = '\0';
         //puts(buffer);
-        printPacket(packFull);
+        //printPacket(packFull);
 
         // send the response
         sendto(listenfd, message, MAXLINE, 0,

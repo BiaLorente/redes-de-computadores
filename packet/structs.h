@@ -3,7 +3,7 @@ struct
     int seqNum;
     int armed;
     int finished;
-    char *buffer;
+    char buffer[4];
     //Timing object here
 } typedef sentFrame;
 
@@ -16,3 +16,5 @@ struct
     char data[4];
     sentFrame frame;
 } typedef packet;
+
+void printPacket(packet);
