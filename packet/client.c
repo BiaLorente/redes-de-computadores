@@ -15,7 +15,7 @@
 #define MAX 80
 #define SA struct sockaddr
 
-void func(int sockfd, packet *pack, int numFrag)
+void func(int sockfd, NetIpPkt *pack, int numFrag)
 {
     char buff[MAX];
     int n;
@@ -25,7 +25,7 @@ void func(int sockfd, packet *pack, int numFrag)
         n = 0;
         //while ((buff[n++] = getchar()) != '\n')
           //  ;
-        printPacket(pack[i]);
+        printIpPacket(pack[i]);
         write(sockfd, &pack[i], sizeof(packet));
 
         bzero(buff, sizeof(buff));
@@ -39,11 +39,11 @@ void func(int sockfd, packet *pack, int numFrag)
 }
   
 // Driver code
-void sendPacket(packet *pack, int numFrag)
+void sendPacket(NetIpPkt *pack, int numFrag)
     {
         
         int opt = 0;
-        printf("\nEnter `1` for UDP connectio or `2` for TCP connectio: ");
+        printf("\nEnter `0` for UDP connectio or `1` for TCP connectio: ");
         
         //scanf("%d\n", &opt);
         printf("\nYou selected: %d\n",opt);
@@ -69,8 +69,11 @@ void sendPacket(packet *pack, int numFrag)
             servaddr.sin_addr.s_addr = INADDR_ANY;
                       
             printf("\Ready to send socket UDP\n");
+            
             //packet *pack = malloc(sizeof(packet) * (4));
             for (int i=0; i<5; i++) {
+                //printIpPacket(pack[i]);
+
                 sendto(sockfd, &pack[i], sizeof(packet),
                     0, (const struct sockaddr *) &servaddr,
                         sizeof(servaddr));

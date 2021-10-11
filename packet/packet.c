@@ -55,23 +55,28 @@ int main(void)
 
     //initialize the window structure
     packet *packetFull = malloc(sizeof(packet) * (windowSize));
-    
+    NetIpPkt *ipPack = (NetIpPkt *)malloc(sizeof(NetIpPkt));
+
 
     for (int i = 0; i < sizeof(window); i++)
     {
         if (window[i].armed == 1)
         {
             packetFull[i] = fillPacketWithFrag(window[i], fragLenght);
-            //printPacket(packetFull[0]);
+            ipPack[i] = fillIpPacket(packetFull[i]);
+            //printIpPacket(ipPack[i]);
         }
     }
-    /*printPacket(packetFull[0]);
-    printPacket(packetFull[1]);
-    printPacket(packetFull[2]);
-    printPacket(packetFull[3]);*/
 
-    
-    sendPacket(packetFull, windowSize);
+
+    printIpPacket(ipPack[1]);
+    printIpPacket(ipPack[2]);
+
+    printIpPacket(ipPack[2]);
+
+    printIpPacket(ipPack[4]);
+
+    sendPacket(ipPack, windowSize);
 
 
     int finished = 0;

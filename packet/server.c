@@ -22,7 +22,9 @@
 // Function designed for chat between client and server.
 void func(int sockfd)
 {
-    packet *pack = malloc(sizeof(packet) * (4));
+    NetIpPkt *pack = malloc(sizeof(NetIpPkt) * (4));
+
+    //packet *pack = malloc(sizeof(packet) * (4));
     //pack->frame.buffer= malloc(sizeof(char) * (4));
     //printf("Sizeof pack[i]->frame.buffer: %lu\n ", sizeof(pack->frame.buffer));
 
@@ -41,12 +43,13 @@ void func(int sockfd)
         //printf("o seq number: %d\n", pack[i].frame.seqNum);
         //printf("Sizeof pack[i].frame.buffer: %lu\n ", sizeof(pack[i].frame.buffer));
         //printf("Data\n");
-        //puts(pack[i].frame.buffer);
+        printf("Sizeof pack[i].pack.frame.buffer: %lu\n ", sizeof(pack[i].pack.frame.buffer));
+        puts(pack[i].pack.frame.buffer);
 
         // print buffer which contains the client contents
         //printf("From client: %s\t To client : ", buff);
-        printPacket(pack[i]);
-        rewindFile(pack[i]);
+        printIpPacket(pack[i]);
+        rewindFileIp(pack[i]);
 
         //printf("pass the printPacket\n");
         bzero(buff, MAX);
@@ -70,7 +73,7 @@ void func(int sockfd)
 int main()
 {
     int opt = 0;
-    printf("\nEnter `1` for UDP connectio or `2` for TCP connectio: ");
+    printf("\nEnter `0` for UDP connectio or `1` for TCP connectio: ");
     //scanf("%d\n", &opt);
     printf("\nYou selected: %d\n",opt);
     if (opt == 0) {
@@ -106,7 +109,8 @@ int main()
         }
            
         printf("\Ready to receive socket UDP\n");
-        packet *pack = malloc(sizeof(packet) * (4));
+        //packet *pack = malloc(sizeof(packet) * (4));
+        NetIpPkt *pack = malloc(sizeof(NetIpPkt) * (4));
 
         //receive the datagram
         len = sizeof(cliaddr);
@@ -116,8 +120,10 @@ int main()
             int n = recvfrom(sockfd, &pack[i], sizeof(packet),
                     0, (struct sockaddr*)&cliaddr,&len); //receive message from server
             printf("receive socket UDP number:%d \n", i);
-            printPacket(pack[i]);
-            rewindFile(pack[i]);
+            printIpPacket(pack[i]);
+            rewindFileIp(pack[i]);
+            printf("Sizeof pack[i].pack.frame.buffer: %lu\n ", sizeof(pack[i].pack.frame.buffer));
+            puts(pack[i].pack.frame.buffer);
         }
         //puts(buffer);
         //printPacket(packFull);
